@@ -1,0 +1,125 @@
+---
+swagger: "2.0"
+info:
+  description: "API"
+  version: "1.0.0"
+  title: "Projects - Mentors and Mentees"
+host: "127.0.0.1:8000"
+basePath: "/"
+schemes:
+- "http"
+paths:
+  /users/createUser/:
+    post:
+      description: "Create a new user"
+      operationId: "user_create"
+      parameters:
+      - in: "body"
+        name: "name"
+        description: "The name of the person"
+        required: false
+        schema:
+          $ref: "#/definitions/User"
+      responses:
+        201:
+          description: "User  added successfully"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+  /project/createProject/:
+    post:
+      description: "Create a project"
+      operationId: "create_project"
+      parameters:
+      - in: "body"
+        name: "name"
+        description: "Name of project"
+        required: false
+        schema:
+          $ref: "#/definitions/Project"
+      responses:
+        201:
+          description: "Project created successfully"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+  /project/assignMentor/:
+    post:
+      description: "Assign a project mentor to a project."
+      operationId: "assign_mentor"
+      parameters:
+      - in: "body"
+        name: "user_proj_id"
+        description: "ID of project and user"
+        required: false
+        schema:
+          $ref: "#/definitions/Project"
+      responses:
+        201:
+          description: "Mentors assigned successfully"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+  /users/{userId}/getMentees/:
+    get:
+      description: "Get the list of IDs of the users being mentored by the queried\
+        \ user."
+      operationId: "get_mentees"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "ID of the user"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "Mentees fetched successfully"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+  /users/{userId}/getProjects/:
+    get:
+      description: "Get the list of IDs of the projects being mentored by the queried\
+        \ user."
+      operationId: "get_mentoring_projects"
+      parameters:
+      - name: "userId"
+        in: "path"
+        description: "ID of the user"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "Projects fetched successfully"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+  /project/{projectId}/getUserMentor/:
+    get:
+      description: "Get the list of IDs of the mentors and users of the project"
+      operationId: "get_users_and_mentors"
+      parameters:
+      - name: "projectId"
+        in: "path"
+        description: "ID of the project"
+        required: true
+        type: "integer"
+      responses:
+        200:
+          description: "Users and mentors"
+      x-swagger-router-controller: "swagger_server.controllers.default_controller"
+definitions:
+  User:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Name of user"
+  ProjectUser:
+    properties:
+      user:
+        type: "integer"
+        description: "Mentee/Mentor ID"
+      project:
+        type: "integer"
+        description: "Project ID"
+      is_mentor:
+        type: "boolean"
+        description: "Denotes whether the user is a mentor or a mentee"
+    description: "object"
+  Project:
+    type: "object"
+    properties:
+      name:
+        type: "string"
+        description: "Name of Project"
